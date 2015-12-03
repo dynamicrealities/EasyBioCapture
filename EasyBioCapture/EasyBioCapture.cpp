@@ -240,15 +240,58 @@ namespace EasyBioCapture
 		PWINBIO_BDB_ANSI_381_HEADER AnsiBdbHeader = (PWINBIO_BDB_ANSI_381_HEADER)(((PBYTE)sample) + sample->StandardDataBlock.Offset);
 		PWINBIO_BDB_ANSI_381_RECORD AnsiBdbRecord = (PWINBIO_BDB_ANSI_381_RECORD)(((PBYTE)AnsiBdbHeader) + sizeof(WINBIO_BDB_ANSI_381_HEADER));
 		PBYTE firstPixel = (PBYTE)((PBYTE)AnsiBdbRecord) + sizeof(WINBIO_BDB_ANSI_381_RECORD);
-		int width = AnsiBdbRecord->HorizontalLineLength;
-		int height = AnsiBdbRecord->VerticalLineLength;
+		
+		int Width = AnsiBdbRecord->HorizontalLineLength;
+		int Height = AnsiBdbRecord->VerticalLineLength;
+		unsigned long BufferSize = AnsiBdbRecord->BlockLength;
+		unsigned char ImageQuality = AnsiBdbRecord->ImageQuality;
+		
+		unsigned char PixelDepth = AnsiBdbHeader->PixelDepth;
+		int CaptureDeviceID = AnsiBdbHeader->CaptureDeviceId;
+		unsigned char ElementCount = AnsiBdbHeader->ElementCount;
+		unsigned long FormatIdentifier = AnsiBdbHeader->FormatIdentifier;
+		int HorizontalImageResolution = AnsiBdbHeader->HorizontalImageResolution;
+		int HorizontalScanResolution = AnsiBdbHeader->HorizontalScanResolution;
+		int ImageAcquisitionLevel = AnsiBdbHeader->ImageAcquisitionLevel;
+		unsigned char ImageCompressionAlgorithm = AnsiBdbHeader->ImageCompressionAlg;
+		int ProductOwner = AnsiBdbHeader->ProductId.Owner;
+		int ProductType = AnsiBdbHeader->ProductId.Type;
+		unsigned char ScaleUnits = AnsiBdbHeader->ScaleUnits;
+		unsigned long VersionNumber = AnsiBdbHeader->VersionNumber;
+		int VerticalImageResolution = AnsiBdbHeader->VerticalImageResolution;
+		int VerticalScanResolution = AnsiBdbHeader->VerticalScanResolution;
+		
+		
+		
 
 		// AnsiBdbRecord->BlockLength Is the Size of the Array
-		array<unsigned char> ^buffer = gcnew array<unsigned char>(AnsiBdbRecord->BlockLength);
-		for (int i = 0; i < AnsiBdbRecord->BlockLength; i++) {
-			buffer[i] = firstPixel[i];
+		array<unsigned char> ^Buffer = gcnew array<unsigned char>(BufferSize);
+		for (int i = 0; i < BufferSize; i++) {
+			Buffer[i] = firstPixel[i];
 		}
-		EasyBioCaptureSample^ returnSample = gcnew EasyBioCaptureSample(width, height, AnsiBdbHeader->PixelDepth, AnsiBdbRecord->BlockLength, buffer);
+
+		EasyBioCaptureSample^ returnSample = 
+			gcnew EasyBioCaptureSample(
+			Width,
+			Height,
+			PixelDepth,
+			BufferSize,
+			CaptureDeviceID,
+			HorizontalImageResolution,
+			HorizontalScanResolution,
+			ImageAcquisitionLevel,
+			ProductOwner,
+			ProductType,
+			VerticalImageResolution,
+			VerticalScanResolution,
+			ImageQuality,
+			ElementCount,
+			FormatIdentifier,
+			ImageCompressionAlgorithm,
+			ScaleUnits,
+			VersionNumber,
+			Buffer
+			);
 
 		/*
 		* NOTE: (width / 3) is necessary because we ask for a 24-bit BMP but is only provided

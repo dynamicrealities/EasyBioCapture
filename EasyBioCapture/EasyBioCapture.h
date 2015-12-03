@@ -193,14 +193,49 @@ namespace EasyBioCapture {
 		int Height;
 		int PixelDepth;
 		int BufferSize;
-		array<unsigned char> ^buffer;
+		int CaptureDeviceID;
+		int HorizontalImageResolution;
+		int HorizontalScanResolution;
+		int ImageAcquisitionLevel;
+		int ProductOwner;
+		int ProductType;
+		int VerticalImageResolution;
+		int VerticalScanResolution;
+
+		unsigned char ImageQuality;
+		unsigned char ElementCount;
+		unsigned char FormatIdentifier;
+		unsigned char ImageCompressionAlgorithm;
+		unsigned char ScaleUnits;
+		unsigned long VersionNumber;
+
+		array<unsigned char> ^Buffer;
+
 		EasyBioCaptureSample() { };
-		EasyBioCaptureSample(int w, int h, int pxd, int b_size, array<unsigned char> ^b) {
+		EasyBioCaptureSample(int w, int h, int pxd, int b_size, int cap_dev_id, int h_img_res, int h_scan_res,
+			int img_acq_lvl, int prd_owner, int prd_type, int v_img_res, int v_scan_res, unsigned char img_q,
+			unsigned char elem_count, unsigned char format_id, unsigned char img_comp_alg, unsigned char scale_units,
+			unsigned char v_number, array<unsigned char> ^b) {
 			Width = w;
 			Height = h;
 			PixelDepth = pxd;
 			BufferSize = b_size;
-			buffer = b;
+			CaptureDeviceID = cap_dev_id;
+			HorizontalImageResolution = h_img_res;
+			HorizontalScanResolution = h_scan_res;
+			ImageAcquisitionLevel = img_acq_lvl;
+			ProductOwner = prd_owner;
+			ProductType = prd_type;
+			VerticalImageResolution = v_img_res;
+			VerticalScanResolution = v_scan_res;
+
+			ImageQuality = img_q;
+			ElementCount = elem_count;
+			FormatIdentifier = format_id;
+			ImageCompressionAlgorithm = img_comp_alg;
+			ScaleUnits = scale_units;
+			VersionNumber = v_number;
+			Buffer = b;
 		};
 	};
 
